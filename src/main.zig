@@ -48,11 +48,13 @@ pub fn main() anyerror!void {
 
         const code: []const u8 = commandArgs[0];
 
+        // TODO: Implement optimize function
         // _ = brain.compile(code);
         const steps = try brain.interpret(code, 0, false);
 
     } else if (mem.eql(u8, command, "file")) {
 
+        // TODO: Check .brain extension?
         const file = try fs.cwd().openFile(commandArgs[0], .{ .read = true });
         defer file.close();
 
@@ -76,9 +78,7 @@ pub fn main() anyerror!void {
         }
 
     } else {
+        // TODO: Print unrecognized and exit
         std.debug.print("{any}", .{args});
     }
-
-    // var brain = Brain{};
-    // std.debug.print("{any}", .{brain.memory[0..10].*});
 }
