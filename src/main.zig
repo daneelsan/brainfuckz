@@ -46,6 +46,10 @@ pub fn main() anyerror!void {
 
     } else if (mem.eql(u8, command, "code")) {
 
+        if (commandArgs.len < 1) {
+            std.debug.print("Error: Missing [CODE] argument.\n", .{});
+            std.process.exit(1);
+        }
         const code: []const u8 = commandArgs[0];
 
         // TODO: Implement optimize function
@@ -53,6 +57,11 @@ pub fn main() anyerror!void {
         const steps = try brain.interpret(code, 0, false);
 
     } else if (mem.eql(u8, command, "file")) {
+
+        if (commandArgs.len < 1) {
+            std.debug.print("Error: Missing [PATH] argument.\n", .{});
+            std.process.exit(1);
+        }
 
         // TODO: Check .brain extension?
         const file = try fs.cwd().openFile(commandArgs[0], .{ .read = true });
