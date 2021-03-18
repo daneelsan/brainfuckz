@@ -75,7 +75,7 @@ $ zig build -Drelease-safe
 
 ## Resources
 
-* [Basics of BrainFuck]("https://gist.github.com/roachhd/dce54bec8ba55fb17d3a.js")
+* [Basics of BrainFuck](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a.js)
 * https://thorstenball.com/blog/2017/01/04/a-virtual-brainfuck-machine-in-go/
 * http://www.bf.doleczek.pl/
 * https://en.wikipedia.org/wiki/Brainfuck
