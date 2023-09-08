@@ -65,12 +65,15 @@ brainfuckz>
 $ git clone https://github.com/daneelsan/brainfuckz.git
 $ cd brainfuckz
 
-# Build the wasm -- release-safe increases performance by >10x compared to the default debug mode
-$ zig build -Drelease-safe
+# Tested on
+$ zig version
+0.11.0
 
-# Start the server
-#$ yarn install
-#$ yarn dev
+# Build in ReleaseFast mode to speed up performance by >10x compared to the default debug mode
+$ zig build -Doptimize=ReleaseFast
+
+# For convenience, copy the executable to the top-level directory
+$ cp zig-out/bin/brainfuckz brainfuckz
 ```
 
 ## Resources

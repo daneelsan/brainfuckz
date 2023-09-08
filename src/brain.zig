@@ -6,7 +6,7 @@ const stdin = std.io.getStdIn().reader();
 const dprint = std.debug.print;
 
 pub const Brain = struct {
-    allocator: *Allocator,
+    allocator: Allocator,
 
     mem: []u8,
     dp: usize = 0, // data_pointer
@@ -18,7 +18,7 @@ pub const Brain = struct {
     const Self = @This();
     pub const defaultMemorySize = 30000;
 
-    pub fn init(allocator: *Allocator, mem_size: usize) !Self {
+    pub fn init(allocator: Allocator, mem_size: usize) !Self {
         const mem = try allocator.alloc(u8, mem_size);
         var self = Self{
             .allocator = allocator,
@@ -82,14 +82,14 @@ pub const Brain = struct {
             self.printState(code);
             while (cond or i < n) : (i += 1) {
                 const offset = try self.execute(code);
-                self.ip = @intCast(usize, @intCast(isize, self.ip) + offset);
+                self.ip = @intCast(@as(isize, @intCast(self.ip)) + offset);
                 self.printState(code);
                 if (self.ip == code.len) break;
             }
         } else {
             while (cond or i < n) : (i += 1) {
                 const offset = try self.execute(code);
-                self.ip = @intCast(usize, @intCast(isize, self.ip) + offset);
+                self.ip = @intCast(@as(isize, @intCast(self.ip)) + offset);
                 if (self.ip == code.len) break;
             }
         }
@@ -162,7 +162,7 @@ pub const Brain = struct {
     }
 
     fn errorHandler(self: Self, code: []const u8, err: BrainError) BrainError {
-        dprint("Error [{s}] (code[{d}]: {c}, mem[{d}]: {x:0>2}, in: {c}, out: {c})", .{
+        dprint("Error [{any}] (code[{d}]: {c}, mem[{d}]: {x:0>2}, in: {c}, out: {c})", .{
             err,
             self.ip,
             code[self.ip],
@@ -175,7 +175,7 @@ pub const Brain = struct {
     }
 
     pub fn printState(self: Self, code: []const u8) void {
-        comptime const radius = 16;
+        const radius = 16;
 
         dprint("\n[\n", .{});
 
