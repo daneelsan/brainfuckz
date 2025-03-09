@@ -1,6 +1,9 @@
 const std = @import("std");
-const mem = std.mem;
+const debug = std.debug;
 const fs = std.fs;
+const io = std.io;
+const mem = std.mem;
+const process = std.process;
 
 const maxBytesRead = std.math.maxInt(u32);
 
@@ -24,14 +27,14 @@ pub fn main() anyerror!void {
 
     const allocator = arena.allocator();
 
-    const args = try std.process.argsAlloc(allocator);
-    defer std.process.argsFree(allocator, args);
+    const args = try process.argsAlloc(allocator);
+    defer process.argsFree(allocator, args);
 
-    const stdout = std.io.getStdOut().writer();
+    const stdout = io.getStdOut().writer();
 
     if (args.len <= 1) {
         try stdout.print("{s}", .{usage});
-        std.process.exit(1);
+        process.exit(1);
     }
 
     const command = args[1];
@@ -44,8 +47,8 @@ pub fn main() anyerror!void {
         try stdout.print("{s}", .{usage});
     } else if (mem.eql(u8, command, "code")) {
         if (commandArgs.len < 1) {
-            std.debug.print("Error: Missing [CODE] argument.\n", .{});
-            std.process.exit(1);
+            debug.print("Error: Missing [CODE] argument.\n", .{});
+            process.exit(1);
         }
         const code: []const u8 = commandArgs[0];
 
@@ -54,15 +57,15 @@ pub fn main() anyerror!void {
         _ = try brain.interpret(code, 0, false);
     } else if (mem.eql(u8, command, "file")) {
         if (commandArgs.len < 1) {
-            std.debug.print("Error: Missing [PATH] argument.\n", .{});
-            std.process.exit(1);
+            debug.print("Error: Missing [PATH] argument.\n", .{});
+            process.exit(1);
         }
 
         // TODO: Check .brain extension?
         const file = try fs.cwd().openFile(commandArgs[0], .{ .mode = .read_only });
         defer file.close();
 
-        var code = try file.readToEndAlloc(allocator, maxBytesRead);
+        const code = try file.readToEndAlloc(allocator, maxBytesRead);
         defer allocator.free(code);
 
         // _ = brain.compile(code);
@@ -80,6 +83,6 @@ pub fn main() anyerror!void {
         }
     } else {
         // TODO: Print unrecognized and exit
-        std.debug.print("{any}", .{args});
+        debug.print("{any}", .{args});
     }
 }

@@ -15,12 +15,12 @@ pub const Brain = struct {
     input: u8 = 0,
     output: u8 = 0,
 
-    const Self = @This();
+    // TODO: Put inside BrainConfig = struct {...}
     pub const defaultMemorySize = 30000;
 
-    pub fn init(allocator: Allocator, mem_size: usize) !Self {
+    pub fn init(allocator: Allocator, mem_size: usize) !Brain {
         const mem = try allocator.alloc(u8, mem_size);
-        var self = Self{
+        var self = Brain{
             .allocator = allocator,
             .mem = mem,
             // .code = &[_]u8{0},
@@ -29,15 +29,15 @@ pub const Brain = struct {
         return self;
     }
 
-    pub fn initDefault(allocator: *Allocator) !Self {
+    pub fn initDefault(allocator: *Allocator) !Brain {
         return try init(allocator, defaultMemorySize);
     }
 
-    pub fn deinit(self: Self) void {
+    pub fn deinit(self: Brain) void {
         self.allocator.free(self.mem);
     }
 
-    pub fn reset(self: *Self) void {
+    pub fn reset(self: *Brain) void {
         self.clearMemory();
         // self.resetCode();
         self.dp = 0;
@@ -46,7 +46,7 @@ pub const Brain = struct {
         self.output = 0;
     }
 
-    pub fn clearMemory(self: *Self) void {
+    pub fn clearMemory(self: *Brain) void {
         for (self.mem) |*m| {
             m.* = 0;
         }
@@ -63,12 +63,12 @@ pub const Brain = struct {
         OutputFailed,
     };
 
-    pub fn interpret(self: *Self, code: []const u8, n: usize, debug: bool) BrainError!usize {
+    pub fn interpret(self: *Brain, code: []const u8, n: usize, debug: bool) BrainError!usize {
         const res = self.run(code, n, debug) catch |err| self.errorHandler(code, err);
         return res;
     }
 
-    pub fn run(self: *Self, code: []const u8, n: usize, debug: bool) BrainError!usize {
+    pub fn run(self: *Brain, code: []const u8, n: usize, debug: bool) BrainError!usize {
         if (self.ip < 0 or self.ip >= code.len) {
             return BrainError.InstructionPointerOutOfBounds;
         }
@@ -96,7 +96,7 @@ pub const Brain = struct {
         return i;
     }
 
-    fn execute(self: *Self, code: []const u8) BrainError!isize {
+    fn execute(self: *Brain, code: []const u8) BrainError!isize {
         var offset: isize = 1;
         switch (code[self.ip]) {
             '>' => {
@@ -161,7 +161,7 @@ pub const Brain = struct {
         return offset;
     }
 
-    fn errorHandler(self: Self, code: []const u8, err: BrainError) BrainError {
+    fn errorHandler(self: Brain, code: []const u8, err: BrainError) BrainError {
         dprint("Error [{any}] (code[{d}]: {c}, mem[{d}]: {x:0>2}, in: {c}, out: {c})", .{
             err,
             self.ip,
@@ -174,7 +174,7 @@ pub const Brain = struct {
         return err;
     }
 
-    pub fn printState(self: Self, code: []const u8) void {
+    pub fn printState(self: Brain, code: []const u8) void {
         const radius = 16;
 
         dprint("\n[\n", .{});

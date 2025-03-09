@@ -1,4 +1,5 @@
 # brainfuckz
+
 A Brainfuck interpreter written in [Zig](https://ziglang.org/).
 
 ```bash
@@ -18,12 +19,14 @@ Usage: brain [command]
 ### **code**
 
 Run a simple Brainfuck program that prints the letter 'H':
+
 ```bash
 $ brainfuckz code '>+++++++++[<++++++++>-]<.'
 H
 ```
 
 Print the classic "Hello world!":
+
 ```bash
 $ brainfuckz code '>+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]
 >++++++++[<++++>-] <.>+++++++++++[<++++++++>-]<-.--------.+++
@@ -42,9 +45,11 @@ Brainfuck
 ```
 
 A [Mandelbrot](http://esoteric.sange.fi/brainfuck/utils/mandelbrot/) program:
+
 ```bash
 $ brainfuckz file program/Mandelbrot.brain
 ```
+
 ![image](images/Mandelbrot.png)
 
 ### **test**
@@ -67,7 +72,7 @@ $ cd brainfuckz
 
 # Tested on
 $ zig version
-0.11.0
+0.14.0
 
 # Build in ReleaseFast mode to speed up performance by >10x compared to the default debug mode
 $ zig build -Doptimize=ReleaseFast
@@ -78,8 +83,8 @@ $ cp zig-out/bin/brainfuckz brainfuckz
 
 ## Resources
 
-* [Basics of BrainFuck](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a.js)
-* https://thorstenball.com/blog/2017/01/04/a-virtual-brainfuck-machine-in-go/
-* http://www.bf.doleczek.pl/
-* https://en.wikipedia.org/wiki/Brainfuck
-* https://github.com/daneelsan/BrainVirtualMachine
+-   [Basics of BrainFuck](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a.js)
+-   https://thorstenball.com/blog/2017/01/04/a-virtual-brainfuck-machine-in-go/
+-   http://www.bf.doleczek.pl/
+-   https://en.wikipedia.org/wiki/Brainfuck
+-   https://github.com/daneelsan/BrainVirtualMachine
